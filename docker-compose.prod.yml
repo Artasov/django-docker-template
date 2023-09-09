@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "1337:80"
+    depends_on:
+      - web
+
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: prod
+    environment:
+      # Устанавливаем переменные приложения Django
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - SQL_HOST=host.docker.internal
+      - SQL_ENGINE=${SQL_ENGINE}
+      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_PORT=${SQL_PORT}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+    volumes:
+      - ./:/usr/src/app/
+    expose:
+      - 8000
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      # Require naming
+      - POSTGRES_DB=${SQL_DATABASE_NAME}
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_PORT=${SQL_PORT}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data
+
+
