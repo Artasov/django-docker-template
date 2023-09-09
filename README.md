@@ -3,7 +3,7 @@
 Этот проект представляет собой шаблон для быстрого старта 
 веб-приложений на базе Django, с использованием контейнеризации 
 Docker и интеграцией таких инструментов, как <br>
-`Nginx` `Gunicorn` `Celery` `Redis` `PostgreSQL`.
+`Nginx` `Gunicorn` `Redis` `PostgreSQL`.
 
 - Готовая конфигурация Docker для dev и prod.
 - Настроенный Nginx как reverse proxy к Gunicorn.
