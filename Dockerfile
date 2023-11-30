@@ -31,14 +31,14 @@ RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадоб
 #   DEV   #
 ###########
 FROM base as dev
-
+RUN chmod +x ./entrypoint.dev.sh
 ENTRYPOINT ["./entrypoint.dev.sh"]
 
 ############
 #   PROD   #
 ############
 FROM base as prod
-
+RUN chmod +x ./entrypoint.prod.sh
 ENTRYPOINT ["./entrypoint.prod.sh"]
 
 
