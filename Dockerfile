@@ -32,15 +32,15 @@ RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадоб
 #   DEV   #
 ###########
 FROM base as dev
-RUN chmod +x ./entrypoint.dev.sh
-ENTRYPOINT ["./entrypoint.dev.sh"]
+RUN chmod +x /srv/entrypoint.dev.sh
+ENTRYPOINT ["/srv/entrypoint.dev.sh"]
 
 ############
 #   PROD   #
 ############
 FROM base as prod
-RUN chmod +x ./entrypoint.prod.sh
-ENTRYPOINT ["./entrypoint.prod.sh"]
+RUN chmod +x srv/entrypoint.prod.sh
+ENTRYPOINT ["srv/entrypoint.prod.sh"]
 
 
 # TODO: Убрать нахер комментарии.
