@@ -10,7 +10,10 @@ services:
       # Устанавливаем переменные приложения Django
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
-      - SQL_HOST=host.docker.internal
+      - DEV=${DEV}
+      - SITE_ID=${SITE_ID}
+      - SQL_HOST=${SQL_HOST}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - SQL_ENGINE=${SQL_ENGINE}
       - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
       - SQL_USER=${SQL_USER}
