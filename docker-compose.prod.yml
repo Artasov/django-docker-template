@@ -24,6 +24,8 @@ services:
       - DEV=${DEV}
       - SITE_ID=${SITE_ID}
       - SQL_HOST=${SQL_HOST}
+      - MAIN_DOMAIN=${MAIN_DOMAIN}
+      - HTTPS=${HTTPS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - SQL_ENGINE=${SQL_ENGINE}
       - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
