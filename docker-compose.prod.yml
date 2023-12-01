@@ -71,6 +71,8 @@ services:
       interval: 5s
       timeout: 2s
       retries: 10
+    networks:
+      - nginx_network
 
   worker:
     build:
@@ -94,6 +96,8 @@ services:
         condition: service_healthy
       nginx:
         condition: service_started
+    networks:
+      - nginx_network
 
   flower:
     image: mher/flower
@@ -140,6 +144,8 @@ services:
     environment:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+    networks:
+      - nginx_network
 
   postgres:
     image: postgres
@@ -158,6 +164,8 @@ services:
       interval: 5s
       timeout: 2s
       retries: 10
+    networks:
+      - nginx_network
 
 networks:
   nginx_network:
