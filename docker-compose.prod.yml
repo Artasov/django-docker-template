@@ -70,8 +70,8 @@ services:
     command: -A config worker --loglevel=INFO
     volumes:
       - ./:/srv
-      - media-data:/srv/media
-      - static-data:/srv/static
+      - ./media:/srv/media
+      - ./static:/srv/static
     links:
       - redis
     environment:
@@ -93,8 +93,8 @@ services:
       - "5555:5555"
     volumes:
       - ./:/srv
-      - media-data:/srv/media
-      - static-data:/srv/static
+      - ./media:/srv/media
+      - ./static:/srv/static
     links:
       - redis
     depends_on:
