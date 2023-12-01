@@ -13,6 +13,8 @@ services:
     volumes:
       - ./media:/media
       - ./static:/static
+    networks:
+      - nginx_network
 
   web:
     build:
@@ -113,6 +115,8 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
+    networks:
+      - nginx_network
 
   celerybeat:
     build:
@@ -153,3 +157,6 @@ services:
       timeout: 2s
       retries: 10
 
+networks:
+  nginx_network:
+    driver: bridge
