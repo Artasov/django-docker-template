@@ -4,7 +4,7 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "1337:80"
+      - "80:80"
     depends_on:
       - web
 
@@ -17,7 +17,7 @@ services:
       # Устанавливаем переменные приложения Django
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
-      - SQL_HOST=host.docker.internal
+      - SQL_HOST=${SQL_HOST}
       - SQL_ENGINE=${SQL_ENGINE}
       - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
       - SQL_USER=${SQL_USER}
