@@ -8,7 +8,7 @@ from Core.tasks import test_task
 @base_view
 def example(request):
     try:
-        user = get_object_or_404(User, id=1)
+        user = User.objects.get(id=1)
     except User.DoesNotExist:
         user = None
     result = test_task.delay(1, 2)
