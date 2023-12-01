@@ -102,7 +102,7 @@ services:
   flower:
     image: mher/flower
     hostname: flower
-    command: celery -A celery flower
+    command: celery -A celery flower --url-prefix=flower
     environment:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
