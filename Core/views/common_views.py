@@ -7,3 +7,4 @@ from Core.services.services import base_view
 def example(request):
     user = User.objects.first()
     return render(request, 'Core/example.html', {'user': user})
+

@@ -6,3 +6,7 @@ class User(AbstractUser):
     balance = models.DecimalField(decimal_places=2, max_digits=8, default=0)
     image = models.ImageField(upload_to='images/')
     # Don't forget to install Pillow
+
+
+class Io(models.Model):
+    aaa = models.CharField(max_length=30)

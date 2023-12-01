@@ -10,8 +10,21 @@ DEBUG = bool(int(env_get('DEBUG')))
 DEV = bool(int(env_get('DEV')))
 SITE_ID = int(env_get('SITE_ID'))
 ALLOWED_HOSTS = str(env_get('ALLOWED_HOSTS')).split(',')
-
+ROOT_URLCONF = 'Core.urls'
 AUTH_USER_MODEL = 'Core.User'
+WSGI_APPLICATION = 'config.wsgi.application'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Europe/Moscow'
+USE_I18N = True
+USE_TZ = True
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCAL_APPS = [
     'Core',
@@ -41,8 +54,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Core.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,11 +70,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
-
 DATABASES = {
     'default': {
-        'ENGINE': env_get('SQL_ENGINE'),
+        'ENGINE': env_get('SQL_ENGINE', 'django.db.backends.sqlite3'),
         'NAME': env_get('SQL_DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
         'USER': env_get('SQL_USER', 'admin'),
         'PASSWORD': env_get('SQL_PASSWORD', 'admin'),
@@ -73,10 +82,10 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 LOGGING = {
@@ -138,17 +147,3 @@ if DEV:
     DEBUG_TOOLBAR_CONFIG = {
         'INTERCEPT_REDIRECTS': False,
     }
-
-
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Europe/Moscow'
-USE_I18N = True
-USE_TZ = True
-
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
