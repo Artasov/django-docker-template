@@ -1,0 +1,20 @@
+FROM nginx
+
+# Удаление стандартной конфигурации Nginx
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Копирование пользовательской конфигурации Nginx
+COPY nginx.conf /etc/nginx/conf.d
+
+# Копирование статических файлов и медиафайлов в контейнер
+COPY static /static/
+COPY media /media/
+
+# Установка разрешений на чтение для всех пользователей на каталоги и файлы
+RUN chmod -R 755 /media /static
+RUN find /static -type f -exec chmod 644 {} \;
+RUN find /media -type f -exec chmod 644 {} \;
+
+# Изменение владельца каталогов на www-data
+RUN chown -R www-data:www-data /static
+RUN chown -R www-data:www-data /media

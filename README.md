@@ -9,6 +9,7 @@ Docker и интеграцией таких инструментов, как: <b
 - Настроенный Nginx как reverse proxy к Gunicorn.
 - Встроенная поддержка PostgreSQL и Redis.
 - Подробные комментарии. 
+- Поддержка MediaFiles
 
 ## Использование
 
@@ -26,7 +27,9 @@ Docker и интеграцией таких инструментов, как: <b
      ```docker
      docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
      ```
-3. ### Django-приложение доступно по адресу [http://localhost:1337](http://localhost:1337)<br><br><br>
+3. ### Django-приложение доступно по адресу [http://localhost:8000](http://localhost:8000)<br><br><br>
+
+## Другое
 
 
 >Если у вас есть предложения по улучшению проекта или вы обнаружили ошибку, 

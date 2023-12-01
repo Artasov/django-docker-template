@@ -78,9 +78,6 @@ Control.ca-list
 Control.ca-bundle
 Control.system-ca-bundle
 GitHub.sublime-settings
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
 data/
 .sass-cache/
 __pycache__/

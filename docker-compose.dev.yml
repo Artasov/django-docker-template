@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  nginx:
+    build:
+      context: ./
+      dockerfile: DockerfileNginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    volumes:
+      - ./media:/media
+      - ./static:/static
+
   web:
     build:
       context: ./
@@ -23,8 +35,9 @@ services:
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
     volumes:
-      - ./:/usr/src/app/
-      - media_volume:/usr/src/app/media
+      - ./:/srv
+      - ./media:/srv/media
+      - ./static:/srv/static
     ports:
       - "8000:8000"
     restart: always
@@ -45,7 +58,6 @@ services:
     image: postgres
     restart: always
     environment:
-      # Require naming
       - POSTGRES_DB=${SQL_DATABASE_NAME}
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
@@ -59,6 +71,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-volumes:
-  media_volume:

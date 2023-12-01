@@ -16,15 +16,15 @@ then
 fi
 
 # Очищаем базу данных без запроса подтверждения
-python manage.py flush --no-input
+#python manage.py flush --no-input
 # Собираем статические файлы в одну папку без запроса подтверждения
 python manage.py collectstatic --noinput &&
 # Создаем файлы миграций
-python manage.py makemigrations &&
+#python manage.py makemigrations &&
 # Применяем миграции к базе данных
 python manage.py migrate &&
 # Создаем суперпользователя без запроса подтверждения
-python manage.py createsuperuser --noinput
+#python manage.py createsuperuser --noinput
 # Запускаем Django-сервер на порту 8000
 python manage.py runserver 0.0.0.0:8000
 

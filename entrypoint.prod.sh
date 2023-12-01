@@ -18,7 +18,7 @@ fi
 # Собираем статические файлы в одну папку без запроса подтверждения
 python manage.py collectstatic --noinput &&
 # Создаем файлы миграций
-python manage.py makemigrations &&
+#python manage.py makemigrations &&
 # Применяем миграции к базе данных
 python manage.py migrate &&
 # Биндим gunicorn

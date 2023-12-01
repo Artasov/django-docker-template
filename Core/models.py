@@ -7,6 +7,3 @@ class User(AbstractUser):
     image = models.ImageField(upload_to='images/')
     # Don't forget to install Pillow
 
-
-class Io(models.Model):
-    aaa = models.CharField(max_length=30)
