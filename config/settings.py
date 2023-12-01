@@ -10,7 +10,9 @@ SECRET_KEY = env_get('SECRET_KEY') or '*'
 DEBUG = bool(int(env_get('DEBUG') or 1))
 DEV = bool(int(env_get('DEV') or 1))
 SITE_ID = int(env_get('SITE_ID') or 1)
-ALLOWED_HOSTS = str(env_get('ALLOWED_HOSTS') or '').split(',')
+HTTPS = bool(int(env_get('DEV') or 0))
+MAIN_DOMAIN = str(env_get('MAIN_DOMAIN') or '')
+ALLOWED_HOSTS = str((env_get('ALLOWED_HOSTS') or '') + MAIN_DOMAIN).split(',')
 ROOT_URLCONF = 'Core.urls'
 AUTH_USER_MODEL = 'Core.User'
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -21,10 +23,10 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'http://127.0.0.1/static/'
+STATIC_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = 'http://127.0.0.1/media/'
+MEDIA_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCAL_APPS = [
