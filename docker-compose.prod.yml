@@ -14,15 +14,13 @@ services:
       - ./media:/media
       - ./static:/static
     networks:
-      - nginx_network
+      - webnet
 
   web:
     build:
       context: ./
       dockerfile: Dockerfile
       target: prod
-    networks:
-      - nginx_network
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
@@ -59,6 +57,8 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    networks:
+      - webnet
 
   redis:
     image: redis:alpine
@@ -72,7 +72,7 @@ services:
       timeout: 2s
       retries: 10
     networks:
-      - nginx_network
+      - webnet
 
   worker:
     build:
@@ -97,7 +97,7 @@ services:
       nginx:
         condition: service_started
     networks:
-      - nginx_network
+      - webnet
 
   flower:
     image: mher/flower
@@ -122,7 +122,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - nginx_network
+      - webnet
 
   celerybeat:
     build:
@@ -145,7 +145,7 @@ services:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     networks:
-      - nginx_network
+      - webnet
 
   postgres:
     image: postgres
@@ -165,8 +165,8 @@ services:
       timeout: 2s
       retries: 10
     networks:
-      - nginx_network
+      - webnet
 
 networks:
-  nginx_network:
+  webnet:
     driver: bridge
