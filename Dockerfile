@@ -39,8 +39,8 @@ ENTRYPOINT ["/srv/entrypoint.dev.sh"]
 #   PROD   #
 ############
 FROM base as prod
-RUN chmod +x srv/entrypoint.prod.sh
-ENTRYPOINT ["srv/entrypoint.prod.sh"]
+RUN chmod +x /srv/entrypoint.prod.sh
+ENTRYPOINT ["/srv/entrypoint.prod.sh"]
 
 
 # TODO: Убрать нахер комментарии.
