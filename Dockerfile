@@ -1,4 +1,4 @@
-FROM python:3.10 as base
+FROM python:3.12 as base
 
 # Копируем все из текущей дериктории в дерикторю srv внутри docker.
 COPY . /srv

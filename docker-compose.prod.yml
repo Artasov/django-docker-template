@@ -28,6 +28,7 @@ services:
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
     volumes:
       - ./:/usr/src/app/
+      - media_volume:./:/usr/src/app/media
     expose:
       - 8000
     depends_on:
