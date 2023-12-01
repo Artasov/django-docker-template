@@ -102,7 +102,7 @@ services:
   flower:
     image: mher/flower
     hostname: flower
-    command: celery -A celery flower --url-prefix=flower
+    command: celery -A celery flower --url-prefix=flower --basic_auth=${FLOWER_DEFAULT_USER}:${FLOWER_DEFAULT_PASS}
     environment:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
