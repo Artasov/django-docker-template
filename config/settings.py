@@ -20,6 +20,9 @@ AUTH_USER_MODEL = 'Core.User'
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Moscow'
@@ -33,14 +36,14 @@ MEDIA_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCAL_APPS = [
-    'Core',
+    'Core.apps.CoreConfig',
 ]
 
 THIRD_APPS = [
-
+    'django_celery_beat',
 ]
 
-INSTALLED_APPS = LOCAL_APPS + THIRD_APPS + dsettings.DJANGO_APPS
+INSTALLED_APPS = dsettings.DJANGO_APPS + THIRD_APPS + LOCAL_APPS
 
 DATABASES = {
     'default': {

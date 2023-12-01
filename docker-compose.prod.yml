@@ -8,7 +8,8 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - web
+      web:
+        condition: service_healthy
     volumes:
       - ./media:/media
       - ./static:/static
@@ -44,6 +45,11 @@ services:
     ports:
       - "8000:8000"
     restart: always
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "netcat -z 0.0.0.0 8000 || exit 1" ]
+      interval: 5s
+      timeout: 2s
+      retries: 10
     depends_on:
       redis:
         condition: service_healthy
@@ -67,7 +73,7 @@ services:
       context: .
     hostname: worker
     entrypoint: celery
-    command: -A config worker --loglevel=INFO
+    command: -A config worker --loglevel=info
     volumes:
       - ./:/srv
       - ./media:/srv/media
@@ -81,6 +87,8 @@ services:
       redis:
         condition: service_healthy
       web:
+        condition: service_healthy
+      nginx:
         condition: service_started
 
   flower:
@@ -88,6 +96,7 @@ services:
     hostname: flower
     command: celery -A celery flower
     environment:
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     ports:
       - "5555:5555"
@@ -99,12 +108,32 @@ services:
       - redis
     depends_on:
       web:
-        condition: service_started
+        condition: service_healthy
       worker:
         condition: service_started
       redis:
         condition: service_healthy
 
+  celerybeat:
+    build:
+      context: .
+    hostname: celerybeat
+    entrypoint: celery
+    command: -A config beat --loglevel=info  --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
+    volumes:
+      - ./:/srv
+      - ./media:/srv/media
+      - ./static:/srv/static
+    depends_on:
+      web:
+        condition: service_healthy
+      worker:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
 
   postgres:
     image: postgres
