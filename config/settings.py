@@ -7,8 +7,8 @@ env_get = os.environ.get
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env_get('SECRET_KEY') or '*'
-DEBUG = bool(int(env_get('DEBUG') or 1))
-DEV = bool(int(env_get('DEV') or 1))
+DEBUG = bool(int(env_get('DEBUG') or 0))
+DEV = bool(int(env_get('DEV') or 0))
 SITE_ID = int(env_get('SITE_ID') or 1)
 HTTPS = bool(int(env_get('HTTPS') or 0))
 MAIN_DOMAIN = str(env_get('MAIN_DOMAIN') or '')
