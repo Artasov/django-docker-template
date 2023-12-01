@@ -21,6 +21,8 @@ services:
       context: ./
       dockerfile: Dockerfile
       target: prod
+    networks:
+      - nginx_network
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
