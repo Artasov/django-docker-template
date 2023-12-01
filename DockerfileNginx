@@ -9,6 +9,8 @@ COPY nginx.conf /etc/nginx/conf.d
 
 
 # Установка разрешений на чтение для всех пользователей на каталоги и файлы
+RUN ls
+RUN pwd
 RUN chmod -R 755 /media /static
 RUN find /static -type f -exec chmod 644 {} \;
 RUN find /media -type f -exec chmod 644 {} \;
