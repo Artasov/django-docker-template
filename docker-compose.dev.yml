@@ -10,8 +10,8 @@ services:
     depends_on:
       - web
     volumes:
-      - ./media:/media
-      - ./static:/static
+      - media-data:/media
+      - static-data:/static
 
   web:
     build:
@@ -35,25 +35,75 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     volumes:
       - ./:/srv
-      - ./media:/srv/media
-      - ./static:/srv/static
+      - media-data:/srv/media
+      - static-data:/srv/static
     ports:
       - "8000:8000"
     restart: always
     depends_on:
       redis:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
 
   redis:
-    image: redis
+    image: redis:alpine
+    hostname: redis
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 2s
+      retries: 10
 
+  worker:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A config worker --loglevel=INFO
+    volumes:
+      - ./:/srv
+      - media-data:/srv/media
+      - static-data:/srv/static
+    links:
+      - redis
+    environment:
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+    depends_on:
+      redis:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+  flower:
+    image: mher/flower
+    hostname: flower
+    command: celery -A celery flower
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./:/srv
+      - media-data:/srv/media
+      - static-data:/srv/static
+    links:
+      - redis
+    depends_on:
+      web:
+        condition: service_started
+      worker:
+        condition: service_started
+      redis:
+        condition: service_healthy
 
   postgres:
     image: postgres
@@ -69,6 +119,10 @@ services:
       - ./data/postgres/:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${SQL_USER} -d ${SQL_DATABASE_NAME} -h localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+volumes:
+  media-data:
+  static-data:

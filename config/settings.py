@@ -10,13 +10,16 @@ SECRET_KEY = env_get('SECRET_KEY') or '*'
 DEBUG = bool(int(env_get('DEBUG') or 0))
 DEV = bool(int(env_get('DEV') or 0))
 SITE_ID = int(env_get('SITE_ID') or 1)
+WSGI_APPLICATION = 'config.wsgi.application'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 HTTPS = bool(int(env_get('HTTPS') or 0))
 MAIN_DOMAIN = str(env_get('MAIN_DOMAIN') or '')
 ALLOWED_HOSTS = str((env_get('ALLOWED_HOSTS') or '') + f',{MAIN_DOMAIN}').split(',')
 ROOT_URLCONF = 'Core.urls'
 AUTH_USER_MODEL = 'Core.User'
-WSGI_APPLICATION = 'config.wsgi.application'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Moscow'
