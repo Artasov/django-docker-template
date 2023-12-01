@@ -7,12 +7,6 @@ COPY . /srv
 WORKDIR /srv
 
 
-RUN chown -R www-data:www-data /srv/static /srv/media && \
-    chmod -R 755 /srv/static /srv/media && \
-    find /srv/static -type f -exec chmod 644 {} \; && \
-    find /srv/media -type f -exec chmod 644 {} \;
-
-
 # Python не будет создавать файлы .pyc
 ENV PYTHONDONTWRITEBYTECODE 1
 # Python будет использовать не буферизованный вывод (без кэширования)
