@@ -4,10 +4,13 @@ from time import sleep
 from celery import shared_task
 from celery_singleton import Singleton
 
+from Core.services.services import base_view
+
 log = logging.getLogger('Core task')
 
 
 @shared_task(base=Singleton)
+@base_view
 def test_task(param1, param2):
     log.warning('TASK SINGLETON STARTED')
     sleep(2)
@@ -15,5 +18,6 @@ def test_task(param1, param2):
 
 
 @shared_task
+@base_view
 def test_periodic_task(param1, param2):
     log.warning(f"TASK PERIODIC SUCCESS {param1} {param1}")

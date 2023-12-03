@@ -12,14 +12,15 @@ services:
         condition: service_healthy
       flower:
         condition: service_started
-    volumes:
-      - ./media:/media
-      - ./static:/static
+#    volumes:
+#      - ./media:/media
+#      - ./static:/static
     networks:
       - net
 
   postgres:
-    image: postgres
+    hostname: postgres
+    image: postgres:alpine
     restart: always
     environment:
       - POSTGRES_DB=${SQL_DATABASE_NAME}
@@ -33,26 +34,29 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${SQL_USER} -d ${SQL_DATABASE_NAME} -h localhost" ]
       interval: 5s
-      timeout: 2s
+      timeout: 5s
       retries: 10
+      start_period: 5s
     networks:
       - net
 
   redis:
-    image: redis:alpine
     hostname: redis
+    image: redis:alpine
     restart: always
     ports:
       - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 5s
-      timeout: 2s
+      timeout: 5s
       retries: 10
+      start_period: 5s
     networks:
       - net
-      
+
   web:
+    hostname: web
     build:
       context: ./
       dockerfile: Dockerfile
@@ -74,37 +78,63 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - REDIS_URL=${REDIS_URL}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - TZ=${TZ}
     volumes:
       - ./:/srv
-      - ./media:/srv/media
-      - ./static:/srv/static
+#      - ./media:/srv/media
+#      - ./static:/srv/static
     ports:
       - "8000:8000"
     restart: always
     healthcheck:
       test: [ "CMD", "sh", "-c", "netcat -z 0.0.0.0 8000 || exit 1" ]
       interval: 5s
-      timeout: 2s
+      timeout: 5s
       retries: 10
+      start_period: 5s
     depends_on:
       redis:
         condition: service_healthy
       postgres:
         condition: service_healthy
+      minio:
+        condition: service_healthy
     networks:
       - net
 
+  minio:
+    hostname: minio
+    image: minio/minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address :9001
+    volumes:
+      - ./data/minio/data:/data
+      - ./data/minio/config:/root/.minio
+    networks:
+      - net
+    healthcheck:
+      test: ["CMD", "echo", "'MinIO is up'"]
+      interval: 5s
+      timeout: 4s
+      retries: 10
+      start_period: 10s
 
   worker:
+    hostname: worker
     build:
       context: .
       dockerfile: DockerfileCeleryWorker
-    hostname: worker
     entrypoint: celery
-    command: -A config worker --loglevel=warning
+    command: -A config worker --loglevel=warning --task-events -E
     volumes:
       - ./:/srv
       - ./media:/srv/media
@@ -116,8 +146,8 @@ services:
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
       - POSTGRES_PORT=${SQL_PORT}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
       - TZ=${TZ}
     depends_on:
       postgres:
@@ -130,19 +160,19 @@ services:
       - net
 
   flower:
-    image: mher/flower
     hostname: flower
+    image: mher/flower
     command: celery -A celery flower --loglevel=warning --url-prefix=flower --basic_auth=${FLOWER_DEFAULT_USER}:${FLOWER_DEFAULT_PASS}
     environment:
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
       - TZ=${TZ}
     ports:
       - "5555:5555"
     volumes:
       - ./:/srv
-      - ./media:/srv/media
-      - ./static:/srv/static
+#      - ./media:/srv/media
+#      - ./static:/srv/static
     links:
       - redis
     depends_on:
@@ -156,15 +186,15 @@ services:
       - net
 
   celerybeat:
+    hostname: celerybeat
     build:
       context: .
-    hostname: celerybeat
     entrypoint: celery
     command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
     volumes:
       - ./:/srv
-      - ./media:/srv/media
-      - ./static:/srv/static
+#      - ./media:/srv/media
+#      - ./static:/srv/static
     depends_on:
       web:
         condition: service_healthy
@@ -173,13 +203,11 @@ services:
       redis:
         condition: service_healthy
     environment:
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
       - TZ=${TZ}
     networks:
       - net
-
-
 
 networks:
   net:

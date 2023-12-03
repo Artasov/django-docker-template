@@ -1,36 +1,35 @@
-# Django Docker Template
+# Django Server Docker Template
 
-Этот проект представляет собой шаблон для быстрого старта 
-веб-приложений на базе Django, с использованием контейнеризации 
-Docker и интеграцией таких инструментов, как: <br><br>
-`Django` `PostgreSQL` `Nginx` `Gunicorn` `Redis`
+This template is for quickly starting web applications based on _Django_,
+using containerization _Docker_ and integration of tools such as:<br><br>
+`Docker` `Django` `Celery` `Beat Sheduler` `Flower` `Cache` `PostgreSQL` `Redis` `Minio` `Nginx` `Gunicorn`
 
-- Готовая конфигурация Docker для dev и prod.
-- Настроенный Nginx как reverse proxy к Gunicorn.
-- Встроенная поддержка PostgreSQL и Redis.
-- Подробные комментарии. 
-- Поддержка MediaFiles
+## Start
 
-## Использование
-
-1. ### Клонируйте репозиторий
-   ```git
-   git clone https://github.com/Artasov/django-docker-template.git
-   cd django-docker-template
-   ```
+1. ### Clone
+    ```git
+    git clone https://github.com/Artasov/django-docker-template.git
+    mv django-docker-template project_name
+    cd project_name
+    ```
 2. ### Запустите Docker Compose
-   * #### Development
-     ```docker
-     docker-compose --env-file .env.dev -f docker-compose.dev.yml up -d --build
-     ```
-   * #### Production
-     ```docker
-     docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
-     ```
-3. ### Django-приложение доступно по адресу [http://localhost:8000](http://localhost:8000)<br><br><br>
+      ```docker
+      docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
+      ```
+## Info
+1. ### Endpoints
+    * **django [http://localhost:8000](http://localhost:8000)**
+    * **minio files [http://127.0.0.1:9000](http://127.0.0.1:9000)**
+    * **minio console [http://127.0.0.1:9001](http://127.0.0.1:9001)**
+    * **flower [http://127.0.0.1:5555/flower](http://127.0.0.1:5555/flower)**<br><br>
+2. ### Cache
+   Using `django-redis` + `django-cachalot`
+3. ### Logs
+   Edit `build.up.sh` and run it now.
+   By default, the entire `docker-compose console` will be
+   logged to `logs/datatime_log_file.log`, a **new file every day**.
+4. ### Other
+   All settings in `.env.prod`
 
-## Другое
-
-
->Если у вас есть предложения по улучшению проекта или вы обнаружили ошибку, 
-пожалуйста, создайте issue или отправьте Pull Request.
+> If you have suggestions for improving the project or you find a bug,
+> please create an issue or send a Pull Request.
