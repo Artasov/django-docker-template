@@ -132,7 +132,7 @@ services:
     hostname: worker
     build:
       context: .
-      dockerfile: DockerfileCelery
+      dockerfile: Dockerfile
     entrypoint: celery
     command: -A config worker --loglevel=warning --task-events -E
     volumes:
@@ -188,7 +188,7 @@ services:
   celerybeat:
     hostname: celerybeat
     build:
-      dockerfile: DockerfileCelery
+      dockerfile: Dockerfile
     entrypoint: celery
     command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
     volumes:
