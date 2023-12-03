@@ -18,7 +18,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update # Обновление списка пакетов внутри контейнера
 RUN apt-get install -y dos2unix # Установка пакета dos2unix, для перевода строк в unix
 RUN apt-get install -y libpq-dev # Установка пакета libpq-dev, необходимого для работы с PostgreSQL
-RUN apt-get install -y netcat-openbsd # Установка netcat-openbsd, утилиты для работы с сетевыми соединениями
+#RUN apt-get install -y netcat-openbsd # Установка netcat-openbsd, утилиты для работы с сетевыми соединениями
 RUN python -m pip install --upgrade pip # Обновление инструмента pip до последней версии
 RUN python -m pip install -r /srv/requirements.txt # Установка зависимостей, перечисленных в файле requirements.txt
 
@@ -39,8 +39,5 @@ ENTRYPOINT ["sh", "/srv/entrypoint.dev.sh"]
 FROM base as prod
 RUN chmod +x /srv/entrypoint.prod.sh
 ENTRYPOINT ["sh", "/srv/entrypoint.prod.sh"]
-
-
-# TODO: Убрать нахер комментарии.
 
 

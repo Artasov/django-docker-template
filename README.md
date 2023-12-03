@@ -26,6 +26,10 @@ using containerization _Docker_ and integration of tools such as:<br><br>
    Using `django-redis` + `django-cachalot`
 3. ### Logs
    Edit `build.up.sh` and run it now.
+   ```shell
+   chmod +x build_up.sh
+   build_up.sh
+   ```
    By default, the entire `docker-compose console` will be
    logged to `logs/datatime_log_file.log`, a **new file every day**.
 4. ### Other
