@@ -24,7 +24,7 @@ app.conf.beat_schedule = {
     'some-task-every-15s': {
         'task': 'Core.tasks.test_periodic_task',
         'schedule': timedelta(seconds=15),
-        'args': ('value1', 'value2'),
+        'args': ('value1'),
     },
 }
 app.conf.CELERY_IMPORTS = ('Core.tasks',)

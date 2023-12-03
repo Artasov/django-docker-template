@@ -148,6 +148,8 @@ services:
       - POSTGRES_PORT=${SQL_PORT}
       - CELERY_RESULT_BACKEND=${REDIS_URL}
       - CELERY_BROKER_URL=${REDIS_URL}
+      - REDIS_CACHE_URL=${REDIS_CACHE_URL}
+      - REDIS_URL=${REDIS_URL}
       - TZ=${TZ}
     depends_on:
       postgres:

@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -21,6 +22,7 @@ ROOT_URLCONF = 'Core.urls'
 AUTH_USER_MODEL = 'Core.User'
 
 REDIS_URL = env_get('REDIS_URL') or 'redis://redis:6379/0'
+REDIS_CACHE_URL = env_get('REDIS_CACHE_URL') or 'redis://redis:6379/1'
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -35,11 +37,10 @@ USE_TZ = True
 STATIC_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}/static/'
 MEDIA_URL = f'http{"s" if HTTPS else ""}://{MAIN_DOMAIN}/media/'
 
-
 MINIO_ENDPOINT = 'minio:9000'
-MINIO_EXTERNAL_ENDPOINT = f'{MAIN_DOMAIN}:9000'  # Для внешнего доступа используйте имя хоста Docker и порт MinIO
+MINIO_EXTERNAL_ENDPOINT = f'{MAIN_DOMAIN}:9000'  # For external access use Docker hostname and MinIO port
 MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = bool(int(env_get('MINIO_EXTERNAL_ENDPOINT_USE_HTTPS') or 0))
-MINIO_ACCESS_KEY = env_get('MINIO_ACCESS_KEY')  # Используйте имя пользователя MinIO из Docker
+MINIO_ACCESS_KEY = env_get('MINIO_ACCESS_KEY')
 MINIO_SECRET_KEY = env_get('MINIO_SECRET_KEY')
 MINIO_USE_HTTPS = bool(int(env_get('MINIO_USE_HTTPS') or 0))
 MINIO_URL_EXPIRY_HOURS = timedelta(days=1)
@@ -53,7 +54,7 @@ MINIO_PUBLIC_BUCKETS = [
 MINIO_POLICY_HOOKS: List[Tuple[str, dict]] = []
 MINIO_MEDIA_FILES_BUCKET = 'media-files'
 MINIO_STATIC_FILES_BUCKET = 'static-files'
-MINIO_BUCKET_CHECK_ON_SAVE = True  # По умолчанию: True // Создает корзину, если она отсутствует, затем сохраняет
+MINIO_BUCKET_CHECK_ON_SAVE = True  # Default: True // Creates a cart if it doesn't exist, then saves it
 DEFAULT_FILE_STORAGE = 'django_minio_backend.models.MinioBackend'
 MINIO_PUBLIC_BUCKETS.append(MINIO_STATIC_FILES_BUCKET)
 MINIO_PUBLIC_BUCKETS.append(MINIO_MEDIA_FILES_BUCKET)
@@ -89,17 +90,35 @@ CACHES = {
     'default': {
         # 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         "BACKEND": "django_redis.cache.RedisCache",
-        'LOCATION': REDIS_URL,
+        'LOCATION': REDIS_CACHE_URL,
         'OPTIONS': {
-            'db': 1,
-            "pool_class": "redis.BlockingConnectionPool",
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         }
     }
 }
+# In some situations, when Redis is only used for
+# cache, you do not want exceptions when Redis is
+# down. This is default behavior in the memcached
+# backend, and it can be emulated in django-redis.
+# For setup memcached like behaviour (ignore
+# connection exceptions), you should set
+# IGNORE_EXCEPTIONS settings on your cache
+# configuration:
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+# Configure as session backend
+# Django can by default use any cache backend as session
+# backend, and you benefit from that by using django-redis
+# as backend for session storage without installing any
+# additional backends:
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
-MIDDLEWARE = [
-                 'django.middleware.cache.UpdateCacheMiddleware',
-                 'django.middleware.cache.FetchFromCacheMiddleware',
+DJANGO_REDIS_LOGGER = 'RedisLogger'
+
+MIDDLEWARE = [  # Views cache
+                 # 'django.middleware.cache.UpdateCacheMiddleware',
+                 # 'django.middleware.cache.FetchFromCacheMiddleware',
              ] + dsettings.MIDDLEWARE + []
 
 TEMPLATES = dsettings.TEMPLATES + [

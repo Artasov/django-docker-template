@@ -1,4 +1,5 @@
 import functools
+import logging
 import traceback
 
 from django.conf import settings
@@ -7,6 +8,7 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotAllowed
 
+log = logging.getLogger('Core')
 
 def allowed_only(allowed_methods):
     def decorator(view_func):
@@ -23,7 +25,6 @@ def allowed_only(allowed_methods):
 
 def base_view(fn):
     """transaction.atomic() и хук исключений самого высокого уровня"""
-
     @functools.wraps(fn)
     def inner(request, *args, **kwargs):
         if settings.DEBUG:
@@ -34,7 +35,7 @@ def base_view(fn):
                 with transaction.atomic():
                     return fn(request, *args, **kwargs)
             except Exception as e:
-                pass
+                log.critical(str(e.__traceback__))
                 # Do somthing
 
     return inner
