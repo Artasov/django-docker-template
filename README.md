@@ -22,6 +22,7 @@ using containerization _Docker_ and integration of tools such as:<br><br>
     * **minio files [http://127.0.0.1:9000](http://127.0.0.1:9000)**
     * **minio console [http://127.0.0.1:9001](http://127.0.0.1:9001)**
     * **flower [http://127.0.0.1:5555/flower](http://127.0.0.1:5555/flower)**<br><br>
+    * **flower login [http://127.0.0.1:5555/flower/login](http://127.0.0.1:5555/flower/login)**<br><br>
 2. ### Cache
    Using `django-redis` + `django-cachalot`
 3. ### Logs

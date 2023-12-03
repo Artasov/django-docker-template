@@ -1,48 +1,48 @@
 FROM python:3.11 as base
 
-# Копируем все из текущей дериктории в дерикторю srv внутри docker
+# Copy everything from the current directory to the srv directory inside docker
 COPY . /srv
-# Устанавливаем рабочую дерикторию из которой
-# будет осуществлятся последующее выполнение команд
+# Set the working directory from which
+# subsequent execution of commands will be carried out
 WORKDIR /srv
 
-# Python не будет создавать файлы .pyc
+# Python will not create .pyc files
 ENV PYTHONDONTWRITEBYTECODE 1
-# Python будет использовать не буферизованный вывод (без кэширования)
+# Python will use unbuffered output (no caching)
 ENV PYTHONUNBUFFERED 1
 
-# -y согласие на любые запросы на подтверждение
-# -yy тоже самое, но более агрессивно, пропуская несовместимости и т.п.
-# -q quite меньше информации в консоли
+# -y agree to any confirmation requests
+# -yy is the same thing, but more aggressive, skipping incompatibilities, etc.
+# -q quite less information in the console
 
-RUN apt-get update # Обновление списка пакетов внутри контейнера
-RUN apt-get install -y dos2unix # Установка пакета dos2unix, для перевода строк в unix
-RUN apt-get install -y libpq-dev # Установка пакета libpq-dev, необходимого для работы с PostgreSQL
-RUN apt-get install -y netcat-openbsd # Установка netcat-openbsd, утилиты для работы с сетевыми соединениями
-RUN python -m venv /venv # Создание и активация виртуального окружения
+RUN apt-get update # Update the list of packages inside the container
+RUN apt-get install -y dos2unix # Install the dos2unix package, to translate strings to unix
+RUN apt-get install -y libpq-dev # Install the libpq-dev package required to work with PostgreSQL
+RUN apt-get install -y netcat-openbsd # Install netcat-openbsd, a utility for working with network connections
+RUN python -m venv /venv # Create and activate a virtual environment
 ENV PATH="/venv/bin:$PATH"
-RUN python -m pip install --upgrade pip # Обновление инструмента pip до последней версии
-RUN python -m pip install -r /srv/requirements.txt # Установка зависимостей, перечисленных в файле requirements.txt
-RUN dos2unix /srv/entrypoint.prod.sh  # перевод строк в unix
-RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадобностью
+RUN python -m pip install --upgrade pip # Upgrade the pip tool to the latest version
+RUN python -m pip install -r /srv/requirements.txt # Install the dependencies listed in requirements.txt
+RUN dos2unix /srv/entrypoint.prod.sh # translate strings to unix
+RUN apt-get --purge remove -y dos2unix # remove d2u as unnecessary
 RUN chmod +x /srv/entrypoint.prod.sh
 RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule # For celerybeat
 
-# Создаем пользователя без прав администратора и переходим на него.
+
+# Create a user without administrator rights and switch to it.
 RUN useradd -ms /bin/bash base_user
+
 USER base_user
 
 ###########
-#   DEV   #
+# DEV #
 ###########
 FROM base as dev
 ENTRYPOINT ["sh", "/srv/entrypoint.dev.sh"]
 
-############
-#   PROD   #
-############
+#############
+# PROD #
+#############
 FROM base as prod
 USER base_user
 ENTRYPOINT ["sh", "/srv/entrypoint.prod.sh"]
-
-

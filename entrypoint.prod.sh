@@ -16,6 +16,10 @@ then
 fi
 
 
+# Log files
+mkdir -p /srv/logs
+touch /srv/logs/access.log /srv/logs/error.log
+chmod 666 /srv/logs/access.log /srv/logs/error.log
 # Собираем статические файлы в одну папку без запроса подтверждения
 python manage.py collectstatic --noinput &&
 # Создаем файлы миграций
@@ -23,6 +27,5 @@ python manage.py collectstatic --noinput &&
 # Применяем миграции к базе данных
 python manage.py migrate &&
 # Биндим gunicorn
-gunicorn config.wsgi:application --bind 0.0.0.0:8000
+gunicorn config.wsgi:application --workers 1 --worker-class gevent --bind 0.0.0.0:8000 --timeout 60 --max-requests 1000 --access-logfile /srv/logs/access.log --error-logfile /srv/logs/error.log
 
-# TODO: Стереть комментарии

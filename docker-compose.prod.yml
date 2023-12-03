@@ -137,8 +137,8 @@ services:
     command: -A config worker --loglevel=warning --task-events -E
     volumes:
       - ./:/srv
-      - ./media:/srv/media
-      - ./static:/srv/static
+#      - ./media:/srv/media
+#      - ./static:/srv/static
     links:
       - redis
     environment:
