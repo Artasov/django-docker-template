@@ -28,9 +28,13 @@ RUN apt-get --purge remove -y dos2unix # remove d2u as unnecessary
 RUN chmod +x /srv/entrypoint.prod.sh
 RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule # For celerybeat
 
+RUN mkdir -p /srv/logs
+RUN touch /srv/logs/access.log /srv/logs/error.log
+RUN chmod 666 /srv/logs/access.log /srv/logs/error.log
+RUN useradd -ms /bin/bash base_user
+RUN chown -R base_user:base_user /srv/logs
 
 # Create a user without administrator rights and switch to it.
-RUN useradd -ms /bin/bash base_user
 
 USER base_user
 

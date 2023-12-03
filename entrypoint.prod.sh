@@ -17,10 +17,12 @@ fi
 
 
 # Log files
-mkdir -p /srv/logs
-touch /srv/logs/access.log /srv/logs/error.log
-chmod 666 /srv/logs/access.log /srv/logs/error.log
-chown -R base_user:base_user /srv/logs
+#mkdir -p /srv/logs
+#touch /srv/logs/access.log /srv/logs/error.log
+#chmod 666 /srv/logs/access.log /srv/logs/error.log
+#chown -R base_user:base_user /srv/logs
+
+
 # Collect static files into one folder without asking for confirmation
 python manage.py collectstatic --noinput &&
 # Create migration files
