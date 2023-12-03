@@ -27,6 +27,9 @@ RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадоб
 
 RUN chmod +x /srv/entrypoint.prod.sh
 
+# For CeleryBeat
+RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule
+
 RUN useradd -ms /bin/bash base_user
 USER base_user
 #RUN useradd -s /bin/bash -m celery_user
