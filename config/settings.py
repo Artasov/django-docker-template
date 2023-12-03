@@ -25,7 +25,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = env_get('TZ') or 'UTC'
 USE_I18N = True
 USE_TZ = True
 
@@ -79,7 +79,7 @@ LOGGING = {
         }
     },
     'handlers': {
-        'file': {
+        'console': {
             'level': 'DEBUG' if DEBUG else 'WARNING',  # Уровень логирования. Выберите нужный уровень.
             'class': 'logging.FileHandler',
             'filename': BASE_DIR / 'django.log',  # Имя файла, куда будут записываться логи.
@@ -89,7 +89,7 @@ LOGGING = {
     },
     'loggers': {
         'Core': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'DEBUG' if DEBUG else 'WARNING',
             'propagate': True,
         },

@@ -21,7 +21,7 @@ app.conf.broker_connection_retry_on_startup = True
 # Load task modules from all registered Django apps.
 app.conf.beat_schedule = {
     # Задача выполняется каждые 15 секунд
-    'task-every-15-seconds': {
+    'some-task-every-15s': {
         'task': 'Core.tasks.test_periodic_task',
         'schedule': timedelta(seconds=15),
         'args': ('value1', 'value2'),

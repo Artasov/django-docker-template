@@ -1,15 +1,19 @@
+import logging
+from time import sleep
+
 from celery import shared_task
+from celery_singleton import Singleton
 
-from config.celery_conf import app
+log = logging.getLogger('Core task')
 
 
-@app.task()
+@shared_task(base=Singleton)
 def test_task(param1, param2):
-    print(f"{param1} SUCCESS {param2}")
-    return f"{param1} SUCCESS {param2}"
+    log.warning('TASK SINGLETON STARTED')
+    sleep(2)
+    log.warning(f"TASK SINGLETON SUCCESS {param1} {param1}")
 
 
-@app.task()
+@shared_task
 def test_periodic_task(param1, param2):
-    print(f"{param1} SUCCESS {param2}")
-    return f"{param1} SUCCESS {param2}"
+    log.warning(f"TASK PERIODIC SUCCESS {param1} {param1}")

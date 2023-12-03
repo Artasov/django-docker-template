@@ -118,3 +118,4 @@ dmypy.json
 .pytype/
 cython_debug/
 # .env.prod Нам не нужно пушить это.....
+/logs/

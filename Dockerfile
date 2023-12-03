@@ -1,11 +1,10 @@
 FROM python:3.11 as base
 
-# Копируем все из текущей дериктории в дерикторю srv внутри docker.
+# Копируем все из текущей дериктории в дерикторю srv внутри docker
 COPY . /srv
 # Устанавливаем рабочую дерикторию из которой
-# будет осуществлятся последующее выполнение команд.
+# будет осуществлятся последующее выполнение команд
 WORKDIR /srv
-
 
 # Python не будет создавать файлы .pyc
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -26,7 +25,6 @@ RUN python -m pip install -r /srv/requirements.txt # Установка зави
 RUN dos2unix /srv/entrypoint.dev.sh  # перевод строк в unix
 RUN dos2unix /srv/entrypoint.prod.sh  # перевод строк в unix
 RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадобностью
-
 
 ###########
 #   DEV   #

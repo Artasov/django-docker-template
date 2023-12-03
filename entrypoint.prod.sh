@@ -15,6 +15,7 @@ then
     echo "Postgres started"
 fi
 
+
 # Собираем статические файлы в одну папку без запроса подтверждения
 python manage.py collectstatic --noinput &&
 # Создаем файлы миграций
