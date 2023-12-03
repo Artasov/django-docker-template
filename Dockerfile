@@ -22,22 +22,26 @@ RUN apt-get install -y netcat-openbsd # Установка netcat-openbsd, ут�
 RUN python -m pip install --upgrade pip # Обновление инструмента pip до последней версии
 RUN python -m pip install -r /srv/requirements.txt # Установка зависимостей, перечисленных в файле requirements.txt
 
-RUN #dos2unix /srv/entrypoint.dev.sh  # перевод строк в unix
 RUN dos2unix /srv/entrypoint.prod.sh  # перевод строк в unix
 RUN apt-get --purge remove -y dos2unix  # удаляем d2u за ненадобностью
+
+RUN chmod +x /srv/entrypoint.prod.sh
+
+RUN useradd -ms /bin/bash base_user
+USER base_user
+#RUN useradd -s /bin/bash -m celery_user
 
 ###########
 #   DEV   #
 ###########
 FROM base as dev
-RUN chmod +x /srv/entrypoint.dev.sh
 ENTRYPOINT ["sh", "/srv/entrypoint.dev.sh"]
 
 ############
 #   PROD   #
 ############
 FROM base as prod
-RUN chmod +x /srv/entrypoint.prod.sh
+USER base_user
 ENTRYPOINT ["sh", "/srv/entrypoint.prod.sh"]
 
 

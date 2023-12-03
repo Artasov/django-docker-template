@@ -121,13 +121,13 @@ LOGGING = {
         }
     },
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django.log',
-            'formatter': 'base_formatter',
-            'encoding': 'utf-8',
-        },
+        # 'file': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'filename': BASE_DIR / 'django.log',
+        #     'formatter': 'base_formatter',
+        #     'encoding': 'utf-8',
+        # },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',

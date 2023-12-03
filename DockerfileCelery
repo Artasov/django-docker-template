@@ -11,7 +11,6 @@ RUN apt-get install -y libpq-dev
 RUN apt-get install -y netcat-openbsd
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/requirements.txt
-RUN #dos2unix /srv/entrypoint.dev.sh
 RUN dos2unix /srv/entrypoint.prod.sh
 RUN apt-get --purge remove -y dos2unix
 RUN chmod +x /srv/entrypoint.prod.sh
