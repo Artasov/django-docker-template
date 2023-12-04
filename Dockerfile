@@ -17,27 +17,28 @@ ENV PYTHONUNBUFFERED 1
 # -yy is the same thing, but more aggressive, skipping incompatibilities, etc.
 # -q quite less information in the console
 
-RUN apt-get update # Update the list of packages inside the container
-RUN apt-get install -y dos2unix # Install the dos2unix package, to translate strings to unix
-RUN apt-get install -y libpq-dev # Install the libpq-dev package required to work with PostgreSQL
-RUN apt-get install -y netcat-openbsd # Install netcat-openbsd, a utility for working with network connections
+RUN apk update # Update the list of packages inside the container
+RUN apk add dos2unix # Install the dos2unix package, to translate strings to unix
+RUN apk add libpq-dev # Install the libpq-dev package required to work with PostgreSQL
+RUN apk add netcat-openbsd # Install netcat-openbsd, a utility for working with network connections
 RUN python -m venv /venv # Create and activate a virtual environment
 ENV PATH="/venv/bin:$PATH"
 RUN python -m pip install --upgrade pip # Upgrade the pip tool to the latest version
 RUN python -m pip install -r /srv/requirements.txt # Install the dependencies listed in requirements.txt
 RUN dos2unix /srv/entrypoint.prod.sh # translate strings to unix
-RUN apt-get --purge remove -y dos2unix # remove d2u as unnecessary
+RUN apk del dos2unix # remove d2u as unnecessary
 RUN chmod +x /srv/entrypoint.prod.sh
 RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule # For celerybeat
 
 RUN mkdir -p /srv/logs
 RUN touch /srv/logs/access.log /srv/logs/error.log
 RUN chmod 666 /srv/logs/access.log /srv/logs/error.log
-USER base_user
 
-RUN useradd -ms /bin/bash base_user
+
+RUN adduser -D base_user
 RUN chown -R base_user:base_user /srv/logs
 
+USER base_user
 # Create a user without administrator rights and switch to it.
 
 
