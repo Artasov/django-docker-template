@@ -1,4 +1,4 @@
-FROM python:3.11 as base
+FROM python:3.11-alpine as base
 
 # Copy everything from the current directory to the srv directory inside docker
 COPY . /srv
