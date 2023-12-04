@@ -3,10 +3,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from Core.views.common_views import example
+from Core.views.common_views import example, health_test
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health_test/', health_test),
     path('', example),
 
 ]
