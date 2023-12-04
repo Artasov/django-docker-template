@@ -3,17 +3,7 @@
 ############
 #   PROD   #
 ############
-echo "Start PROD mode"
 
-if [ "$SQL_DATABASE" = "postgres" ]
-then
-    echo "Waiting for postgres..."
-    # No connection to PostgreSQL has been established yet, wait
-    while ! nc -z postgres "$SQL_PORT"; do
-      sleep 0.1
-    done
-    echo "Postgres started"
-fi
 
 
 # Log files
