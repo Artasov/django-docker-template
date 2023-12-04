@@ -86,6 +86,7 @@ DATABASES = {
     }
 }
 
+# See for more about django-redis cache: https://github.com/jazzband/django-redis
 CACHES = {
     'default': {
         # 'BACKEND': 'django.core.cache.backends.redis.RedisCache',

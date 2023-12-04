@@ -29,17 +29,13 @@ RUN dos2unix /srv/entrypoint.prod.sh # translate strings to unix
 RUN apk del dos2unix # remove d2u as unnecessary
 RUN chmod +x /srv/entrypoint.prod.sh
 RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule # For celerybeat
-
 RUN mkdir -p /srv/logs
-RUN touch /srv/logs/access.log /srv/logs/error.log
-RUN chmod 666 /srv/logs/access.log /srv/logs/error.log
 
-
+# Create a user without administrator rights and switch to it.
 RUN adduser -D base_user
 RUN chown -R base_user:base_user /srv/logs
 
 USER base_user
-# Create a user without administrator rights and switch to it.
 
 
 ###########

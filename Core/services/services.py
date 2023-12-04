@@ -10,6 +10,7 @@ from django.http import HttpResponseNotAllowed
 
 log = logging.getLogger('Core')
 
+
 def allowed_only(allowed_methods):
     def decorator(view_func):
         def wrapped_view(request, *args, **kwargs):
@@ -25,6 +26,7 @@ def allowed_only(allowed_methods):
 
 def base_view(fn):
     """transaction.atomic() и хук исключений самого высокого уровня"""
+
     @functools.wraps(fn)
     def inner(request, *args, **kwargs):
         if settings.DEBUG:
@@ -35,8 +37,7 @@ def base_view(fn):
                 with transaction.atomic():
                     return fn(request, *args, **kwargs)
             except Exception as e:
-                log.critical(str(e.__traceback__))
-                # Do somthing
+                log.critical("ERROR", exc_info=True)
 
     return inner
 
