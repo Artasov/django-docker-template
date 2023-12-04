@@ -11,9 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Python will use unbuffered output (no caching)
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir -p /srv/logs
-RUN touch /srv/logs/access.log /srv/logs/error.log
-RUN chmod 666 /srv/logs/access.log /srv/logs/error.log
+
 
 # -y agree to any confirmation requests
 # -yy is the same thing, but more aggressive, skipping incompatibilities, etc.
@@ -49,5 +47,8 @@ ENTRYPOINT ["sh", "/srv/entrypoint.dev.sh"]
 # PROD #
 #############
 FROM base as prod
+RUN mkdir -p /srv/logs
+RUN touch /srv/logs/access.log /srv/logs/error.log
+RUN chmod 666 /srv/logs/access.log /srv/logs/error.log
 USER base_user
 ENTRYPOINT ["sh", "/srv/entrypoint.prod.sh"]
