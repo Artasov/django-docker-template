@@ -127,7 +127,7 @@ services:
     hostname: worker
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileCelery
     entrypoint: celery
     command: -A config worker --loglevel=warning --task-events -E
     volumes:
