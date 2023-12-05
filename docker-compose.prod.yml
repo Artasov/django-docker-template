@@ -85,11 +85,11 @@ services:
       - "8000:8000"
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8000/health_test/ || exit 1"]
+      test: [ "CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8000/health_test/ || exit 1" ]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 10
-      start_period: 5s
+      start_period: 15s
     depends_on:
       redis:
         condition: service_healthy
@@ -117,7 +117,7 @@ services:
     networks:
       - net
     healthcheck:
-      test: ["CMD", "echo", "'MinIO is up'"]
+      test: [ "CMD", "echo", "'MinIO is up'" ]
       interval: 30s
       timeout: 4s
       retries: 10
