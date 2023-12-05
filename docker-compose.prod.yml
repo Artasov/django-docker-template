@@ -135,10 +135,6 @@ services:
     links:
       - redis
     environment:
-      - POSTGRES_DB=${SQL_DATABASE_NAME}
-      - POSTGRES_USER=${SQL_USER}
-      - POSTGRES_PASSWORD=${SQL_PASSWORD}
-      - POSTGRES_PORT=${SQL_PORT}
       - CELERY_RESULT_BACKEND=${REDIS_URL}
       - CELERY_BROKER_URL=${REDIS_URL}
       - REDIS_CACHE_URL=${REDIS_CACHE_URL}
@@ -195,6 +191,15 @@ services:
       redis:
         condition: service_healthy
     environment:
+      - SQL_ENGINE=${SQL_ENGINE}
+      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_PORT=${SQL_PORT}
+      - POSTGRES_DB=${SQL_DATABASE_NAME}
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_PORT=${SQL_PORT}
       - CELERY_RESULT_BACKEND=${REDIS_URL}
       - CELERY_BROKER_URL=${REDIS_URL}
       - TZ=${TZ}
