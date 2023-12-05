@@ -184,9 +184,9 @@ services:
       context: .
       dockerfile: Dockerfile
     entrypoint: celery
-    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
+    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-volume/celerybeat-schedule --pidfile=/srv/celerybeat-volume/celerybeat.pid
     volumes:
-      - celerybeat_volume:/srv
+      - ./:/srv
     links:
       - redis
     depends_on:
@@ -206,6 +206,3 @@ services:
 networks:
   net:
     driver: bridge
-
-volumes:
-  celerybeat_volume:
