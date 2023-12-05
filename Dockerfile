@@ -21,7 +21,7 @@ RUN chmod +x /srv/entrypoint.prod.sh
 RUN adduser -D base_user
 RUN chown -R base_user:base_user /srv
 
-#USER base_user
+USER base_user
 
 ###########
 # DEV #

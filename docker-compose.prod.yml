@@ -89,7 +89,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
-      start_period: 15s
+      start_period: 5s
     depends_on:
       redis:
         condition: service_healthy
@@ -184,7 +184,7 @@ services:
       context: .
       dockerfile: DockerfileCelery
     entrypoint: celery
-    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-volume/celerybeat-schedule --pidfile=/srv/celerybeat-volume/celerybeat.pid
+    command: -A config beat --loglevel=warning # --schedule=/srv/celerybeat-volume/celerybeat-schedule --pidfile=/srv/celerybeat-volume/celerybeat.pid
     volumes:
       - ./:/srv
     links:
