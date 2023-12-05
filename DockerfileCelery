@@ -17,7 +17,8 @@ RUN python -m pip install -r /srv/requirements.txt
 
 RUN adduser -D base_user
 RUN chown -R base_user /srv
-
+RUN chown base_user /srv
+RUN chmod 777 /srv
 USER base_user
 
 ###########
