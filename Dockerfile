@@ -19,15 +19,17 @@ RUN apk del dos2unix
 RUN chmod +x /srv/entrypoint.prod.sh
 
 RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule
-RUN touch /srv/celerybeat.pid && chmod 666 /srv/celerybeat.pid
+RUN touch /srv/celerybeat.pid
 RUN mkdir -p /srv/logs
 
 RUN adduser -D base_user
-RUN chown -R base_user:base_user /srv/logs
-RUN chown base_user:base_user /srv/celerybeat.pid  # Change ownership of the PID file to base_user
+RUN chown -R base_user:base_user /srv
+USER base_user
+RUN chmod 666 /srv/celerybeat.pid
+RUN touch /srv/celerybeat-schedule && chmod 666 /srv/celerybeat-schedule
 
 USER base_user
-
+RUN chmod 666 /srv/celerybeat.pid
 
 ###########
 # DEV #
