@@ -184,7 +184,7 @@ services:
       context: .
       dockerfile: DockerfileCelery
     entrypoint: celery
-    command: -A config beat --loglevel=warning --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: -A config beat --loglevel=warning --workdir=./srv --scheduler django_celery_beat.schedulers:DatabaseScheduler # --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
     volumes:
       - ./:/srv
     links:
