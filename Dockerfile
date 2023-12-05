@@ -18,6 +18,9 @@ RUN dos2unix /srv/entrypoint.prod.sh
 RUN apk del dos2unix
 RUN chmod +x /srv/entrypoint.prod.sh
 
+RUN touch /srv/celerybeat-volume/celerybeat-schedule && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
+RUN touch /srv/celerybeat-volume/celerybeat.pid  && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
+
 RUN adduser -D base_user
 RUN chown -R base_user:base_user /srv
 
