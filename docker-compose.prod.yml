@@ -135,19 +135,6 @@ services:
     links:
       - redis
     environment:
-      - SECRET_KEY=${SECRET_KEY}
-      - DEBUG=${DEBUG}
-      - DEV=${DEV}
-      - SITE_ID=${SITE_ID}
-      - SQL_HOST=${SQL_HOST}
-      - MAIN_DOMAIN=${MAIN_DOMAIN}
-      - HTTPS=${HTTPS}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - SQL_ENGINE=${SQL_ENGINE}
-      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
-      - SQL_USER=${SQL_USER}
-      - SQL_PASSWORD=${SQL_PASSWORD}
-      - SQL_PORT=${SQL_PORT}
       - POSTGRES_DB=${SQL_DATABASE_NAME}
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
@@ -191,28 +178,30 @@ services:
     networks:
       - net
 
-#  celerybeat:
-#    hostname: celerybeat
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    entrypoint: celery
-#    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
-#    volumes:
-#      - celerybeat_volume:/srv
-#    depends_on:
-#      web:
-#        condition: service_healthy
-#      worker:
-#        condition: service_started
-#      redis:
-#        condition: service_healthy
-#    environment:
-#      - CELERY_RESULT_BACKEND=${REDIS_URL}
-#      - CELERY_BROKER_URL=${REDIS_URL}
-#      - TZ=${TZ}
-#    networks:
-#      - net
+  celerybeat:
+    hostname: celerybeat
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: celery
+    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
+    volumes:
+      - celerybeat_volume:/srv
+    links:
+      - redis
+    depends_on:
+      web:
+        condition: service_healthy
+      worker:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - CELERY_RESULT_BACKEND=${REDIS_URL}
+      - CELERY_BROKER_URL=${REDIS_URL}
+      - TZ=${TZ}
+    networks:
+      - net
 
 networks:
   net:
