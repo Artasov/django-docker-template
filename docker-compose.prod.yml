@@ -182,7 +182,7 @@ services:
     hostname: celerybeat
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileCelery
     entrypoint: celery
     command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-volume/celerybeat-schedule --pidfile=/srv/celerybeat-volume/celerybeat.pid
     volumes:

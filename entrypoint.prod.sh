@@ -4,6 +4,9 @@
 #   PROD   #
 ############
 
+mkdir -p /srv/celerybeat-volume/
+touch /srv/celerybeat-volume/celerybeat-schedule && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
+touch /srv/celerybeat-volume/celerybeat.pid  && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
 
 # Collect static files into one folder without asking for confirmation
 python manage.py collectstatic --noinput &&
