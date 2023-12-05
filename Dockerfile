@@ -19,7 +19,7 @@ RUN apk del dos2unix
 RUN chmod +x /srv/entrypoint.prod.sh
 
 RUN adduser -D base_user
-RUN chown -R base_user:base_user /srv
+RUN chown -R base_user /srv
 
 USER base_user
 

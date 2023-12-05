@@ -184,7 +184,7 @@ services:
       context: .
       dockerfile: DockerfileCelery
     entrypoint: celery
-    command: -A config beat --loglevel=warning # --schedule=/srv/celerybeat-volume/celerybeat-schedule --pidfile=/srv/celerybeat-volume/celerybeat.pid
+    command: -A config beat --loglevel=warning --schedule=/srv/celerybeat-schedule --pidfile=/srv/celerybeat.pid
     volumes:
       - ./:/srv
     links:

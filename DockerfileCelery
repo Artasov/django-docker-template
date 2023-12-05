@@ -16,7 +16,7 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install -r /srv/requirements.txt
 
 RUN adduser -D base_user
-RUN chown -R base_user:base_user /srv
+RUN chown -R base_user /srv
 
 USER base_user
 
