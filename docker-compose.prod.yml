@@ -127,7 +127,7 @@ services:
     hostname: worker
     build:
       context: .
-      dockerfile: DockerfileCelery
+      dockerfile: Dockerfile
     entrypoint: celery
     command: -A config worker --loglevel=warning --task-events -E
     volumes:
@@ -135,6 +135,19 @@ services:
     links:
       - redis
     environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DEV=${DEV}
+      - SITE_ID=${SITE_ID}
+      - SQL_HOST=${SQL_HOST}
+      - MAIN_DOMAIN=${MAIN_DOMAIN}
+      - HTTPS=${HTTPS}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - SQL_ENGINE=${SQL_ENGINE}
+      - SQL_DATABASE_NAME=${SQL_DATABASE_NAME}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - SQL_PORT=${SQL_PORT}
       - POSTGRES_DB=${SQL_DATABASE_NAME}
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
