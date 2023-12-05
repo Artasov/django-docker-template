@@ -202,6 +202,8 @@ services:
       - POSTGRES_PORT=${SQL_PORT}
       - CELERY_RESULT_BACKEND=${REDIS_URL}
       - CELERY_BROKER_URL=${REDIS_URL}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - TZ=${TZ}
     networks:
       - net
