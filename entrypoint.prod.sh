@@ -4,9 +4,9 @@
 #   PROD   #
 ############
 
-mkdir -p /srv/celerybeat-volume/
-touch /srv/celerybeat-volume/celerybeat-schedule && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
-touch /srv/celerybeat-volume/celerybeat.pid  && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
+#mkdir -p /srv/celerybeat-volume/
+#touch /srv/celerybeat-volume/celerybeat-schedule && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
+#touch /srv/celerybeat-volume/celerybeat.pid  && chmod 666 /srv/celerybeat-volume/celerybeat-schedule
 
 #source /srv/venv/bin/activate
 
